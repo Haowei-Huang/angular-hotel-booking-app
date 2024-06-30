@@ -2,8 +2,8 @@
 
 This project is a hotel booking system built using Angular, Angular Material, and Tailwind CSS. It provides functionalities for users to search and filter hotels, create bookings, and manage their profiles. Admin users have additional privileges for managing users, hotels, and bookings.
 
-Check out the React version here:
-https://github.com/Haowei-Huang/react-hotel-booking-app
+[Check out the React version here](https://github.com/Haowei-Huang/react-hotel-booking-app)
+
 
 ## Features
 
