@@ -33,7 +33,7 @@ export class HotelService {
   }
 
   searchFormGroup = new FormGroup({
-    location: new FormControl(''),
+    location: new FormControl('Toronto'),
     from: new FormControl(moment(), [Validators.required]),
     to: new FormControl(moment().add(1, 'day'), [Validators.required]),
     numberOfGuest: new FormControl(1, [Validators.required]),
