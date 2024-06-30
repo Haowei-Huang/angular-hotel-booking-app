@@ -1,0 +1,26 @@
+<mat-card class="mx-auto mt-2">
+    <mat-card-content>
+        <form [formGroup]="searchFormGroup">
+            <mat-form-field>
+                <mat-label>City</mat-label>
+                <input type="text" matInput formControlName="location">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Choose a start date</mat-label>
+                <input matInput [min]="today" formControlName="from" [matDatepicker]="picker1">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Choose an end date</mat-label>
+                <input matInput [min]="minDate" formControlName="to" [matDatepicker]="picker2">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            <button mat-raised-button color="primary" routerLink="/hotels">Search</button>
+            <!-- <button mat-raised-button color="primary" routerLink="/dashboard">Dashboard</button> -->
+        </form>
+    </mat-card-content>
+</mat-card>

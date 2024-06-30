@@ -1,0 +1,89 @@
+<mat-card>
+    <mat-card-content>@if(currentStep === 'EnterEmail'){
+        <div>
+
+            <h2>
+                Sign in or create an account
+            </h2>
+            <form (ngSubmit)="submitEmail()">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput [formControl]="email" placeholder="Ex. pat@example.com">
+                </mat-form-field>
+                @if(email.invalid && email.touched){
+                @if (email.hasError('email') && !email.hasError('required') ) {
+                <mat-error>Please enter a valid email address</mat-error>
+                }
+                @if (email.hasError('required')) {
+                <mat-error>Email is <strong>required</strong></mat-error>
+                }
+                }
+                <button type="submit" mat-raised-button color="primary" [disabled]="email.invalid">Continue with
+                    email</button>
+            </form>
+        </div>}
+        @if(currentStep === 'Register'){
+        <div>
+            <h2>Create Password</h2>
+            <p>Use a minimum of 10 characters, including uppercase letters, lowercase letters and numbers.</p>
+            <form [formGroup]="passwordFormGroup" (ngSubmit)="register()">
+                <mat-form-field>
+                    <mat-label> Password</mat-label>
+                    <input type="password" matInput formControlName="password">
+                </mat-form-field>
+                @if(password && password.invalid && password.touched){
+                @if (password.hasError('required')) {
+                <mat-error>Password is <strong>required</strong></mat-error>
+                }
+                @if (!password.hasError('required') && password.hasError('pattern')) {
+                <mat-error>password format is wrong, please use a minimum of 3 characters, including uppercase letters,
+                    lowercase letters, and numbers.</mat-error>
+                }
+                }
+                <br />
+                <mat-form-field>
+                    <mat-label> Confirm your password</mat-label>
+                    <input type="password" matInput formControlName="confirmPassword">
+                </mat-form-field>
+                @if (passwordFormGroup.errors?.['unmatchPassword'] && (passwordFormGroup.touched ||
+                passwordFormGroup.dirty)) {
+                <mat-error>Passwords are not matching</mat-error>
+                }
+                @if(confirmPassword && confirmPassword.invalid && confirmPassword.touched){
+                @if (confirmPassword.hasError('required')) {
+                <mat-error>Please confirm your password</mat-error>
+                }
+                }
+                <button type="submit" mat-raised-button color="primary"
+                    [disabled]="passwordFormGroup.invalid">Register</button>
+            </form>
+        </div>
+        }
+        @if(currentStep === 'Login'){<div>
+            <h2>Enter your password</h2>
+            <form (ngSubmit)="login()">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Password</mat-label>
+                    <input type="password" matInput [formControl]="loginPassword">
+                </mat-form-field>
+                @if(loginPassword.hasError('wrongPassword')){
+                <mat-error>Password is wrong, please check again</mat-error>
+                }
+                <button type="submit" mat-raised-button color="primary"
+                    [disabled]="loginPassword.invalid">Login</button>
+            </form>
+        </div>}
+        @if(currentStep === 'LoginSuccess'){<div>
+            <h2>Login Successfully!</h2>
+            @if(role === 'admin'){<a mat-raised-button class="mb-1" color="primary" routerLink="/dashboard">Go to
+                dashboard</a>
+            }
+            <button mat-raised-button color="primary" (click)="closeDialog()">Close</button>
+        </div>
+        }
+        @if(currentStep === 'RegisterSuccess'){<div>
+            <h2>Register Successfully!</h2>
+            <button mat-raised-button color="primary" (click)="closeDialog()">Continue</button>
+        </div>}
+    </mat-card-content>
+</mat-card>

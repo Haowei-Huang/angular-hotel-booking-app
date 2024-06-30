@@ -1,0 +1,85 @@
+<div>
+    <form [formGroup]="clientInfoGroup" class="space-y-4">
+        <mat-card-title class="text-lg mb-2">Personal Details</mat-card-title>
+        <!-- First Name Field -->
+        <mat-form-field appearance="fill" class="w-full">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" placeholder="Enter your first name">
+            @if(clientInfoGroup.controls['firstName'].invalid ){
+            @if(clientInfoGroup.controls['firstName'].hasError('required')){
+            <mat-error>
+                First name is required.
+            </mat-error>
+            }
+            @if(!clientInfoGroup.controls['firstName'].hasError('required') &&
+            clientInfoGroup.controls['firstName'].hasError('pattern')){
+            <mat-error>
+                Name format is invalid.
+            </mat-error>
+            }
+            }
+        </mat-form-field>
+
+        <!-- Last Name Field -->
+        <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" placeholder="Enter your last name">
+            @if(clientInfoGroup.controls['lastName'].invalid){
+            @if(clientInfoGroup.controls['lastName'].hasError('required')){
+            <mat-error>
+                Last name is required.
+            </mat-error>
+            }
+            @if(!clientInfoGroup.controls['lastName'].hasError('required') &&
+            clientInfoGroup.controls['lastName'].hasError('pattern')){
+            <mat-error>
+                Name format is invalid.
+            </mat-error>
+            }
+            }
+        </mat-form-field>
+
+        <!-- Email Field -->
+        <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Email Address</mat-label>
+            <input matInput formControlName="email" type="email" placeholder="Enter your email">
+            @if(clientInfoGroup.controls['email'].invalid){
+            @if(clientInfoGroup.controls['email'].hasError('required')){
+            <mat-error>
+                Email name is required.
+            </mat-error>
+            }
+            @if(!clientInfoGroup.controls['email'].hasError('required') &&
+            clientInfoGroup.controls['email'].hasError('email')){
+            <mat-error>
+                Email format is invalid.
+            </mat-error>
+            }
+            }
+        </mat-form-field>
+
+        <!-- Phone Number Field -->
+        <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phone" type="tel" placeholder="Enter your phone number">
+            @if(clientInfoGroup.controls['phone'].invalid){
+            @if(clientInfoGroup.controls['phone'].hasError('required')){
+            <mat-error>
+                Phone number is required.
+            </mat-error>
+            }
+            @if(!clientInfoGroup.controls['phone'].hasError('required') &&
+            clientInfoGroup.controls['phone'].hasError('pattern')){
+            <mat-error>
+                Phone number is invalid, it must be 10 digits without any space or other
+                characters
+            </mat-error>
+            }
+            }
+        </mat-form-field>
+    </form>
+
+    <div class="my-[10px]">
+        <button mat-raised-button color="primary" (click)="submitClientInfo()">Submit</button>
+    </div>
+</div>

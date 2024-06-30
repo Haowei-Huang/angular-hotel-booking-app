@@ -1,0 +1,37 @@
+@if(bookings.length === 0 ){
+<div class="flex justify-center items-center h-screen mt-5">
+    <h4 class="text-3xl">It seems you don't have any booking yet.</h4>
+</div>
+} @else {
+<div class="mx-auto mt-3 w-3/4">
+    <h1 class="text-3xl text-center my-2 mx-auto">My Bookings</h1>
+    <div class="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
+        @for(booking of bookings; track booking._id){
+        <div class="mx-auto max-w-sm my-2 hover:shadow-md shadow">
+            <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">
+                    {{booking.hotelName}}
+                </h3>
+                <p class="text-gray-600">
+                    Booking ID: {{ booking._id }}
+                </p>
+                <p>
+                    Check in: {{ formatDate(booking.from) }} 16:00 <br> Check out: {{ formatDate(booking.to) }}
+                    12:00
+                </p>
+                <p class="text-primary">
+                    CAD {{ booking.totalPrice.toFixed(2) }}
+                </p>
+                <p class="text-gray-600">
+                    Booking created at {{ formatTime(booking.time)}}
+                </p>
+                <button class="mt-2 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                    (click)="checkDetails(booking)">
+                    View details
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+}

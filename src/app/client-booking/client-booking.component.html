@@ -1,0 +1,512 @@
+@if(isBookingSuccess === false){
+<div class="w-4/5 mx-auto mt-[20px] flex flex-row">
+    <div class="flex flex-col mr-8 w-1/3 space-y-2">
+        <mat-card class="shadow-lg mb-2">
+            <mat-card-content>
+                <h3 class="text-gray-500">Hotel Info</h3>
+                <h4 class="mb-2">{{ hotel.HotelName }}</h4>
+                <div class="flex items-center space-x-1">
+                    <mat-icon color="action">location_on</mat-icon>
+                    <p class="text-gray-500 text-sm">
+                        {{ hotel.Address.StreetAddress + ', ' + hotel.Address.City + ', ' +
+                        hotel.Address.StateProvince + ', ' + hotel.Address.PostalCode + ', '
+                        + hotel.Address.Country }}
+                    </p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="shadow-md mb-2">
+            <mat-card-content>
+                <h4 class="mb-2">Your booking details</h4>
+                <div class="flex items-center space-x-2">
+                    <div class="flex-grow">
+                        <p class="text-gray-500">Check-in</p>
+                        <p class="text-lg">{{ formatDate(from) }}</p>
+                        <p class="text-sm">From 16:00</p>
+                    </div>
+                    <mat-divider class="flex-shrink" orientation="vertical"></mat-divider>
+                    <div class="flex-grow">
+                        <p class="text-gray-500">Check-out</p>
+                        <p class="text-lg">{{ formatDate(to) }}</p>
+                        <p class="text-sm">Until 12:00</p>
+                    </div>
+                </div>
+                <p class="text-gray-500 mt-2">Total length of stay:</p>
+                <p class="text-base">{{ duration }} {{ duration > 1 ? 'nights' : 'night' }}</p>
+                <p class="text-gray-500 mt-1">You selected</p>
+                <p class="text-base">{{ rooms.length }} {{ rooms.length > 1 ? 'rooms' : 'room' }} for {{
+                    numberOfGuest }} {{ numberOfGuest > 1 ? 'guests' : 'guest' }}</p>
+                <div>
+                    @for(room of rooms; track room.RoomId){
+                    <p class="text-sm mt-1">{{ room.Description }}</p>
+                    }
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="shadow-lg">
+            <mat-card-content>
+                <h4>Your price summary</h4>
+                <div class="flex justify-between bg-blue-500 text-white p-2 rounded">
+                    <h3>Price</h3>
+                    <h3>CAD {{ totalPrice.toFixed(2) }}</h3>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="w-4/5">
+        <mat-stepper [linear]="isLinear" #stepper>
+            <mat-step [stepControl]="clientInfoGroup">
+                <mat-card class="shadow-md p-4">
+                    <mat-card-content>
+                        @if(isloggedIn && userData.clientInfo){
+                        <div class="p-4 border border-solid my-2 flex flex-col">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="col-span-1">
+                                    <p>First Name</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>{{ userData.clientInfo.firstName }}</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>Last Name</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>{{ userData.clientInfo.lastName }}</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>Email</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>{{ userData.clientInfo.email }}</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>Phone</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>{{ userData.clientInfo.phone }}</p>
+                                </div>
+                                <div class="col-span-2" [formGroup]="reuseInfoGroup">
+                                    <p class="text-primary mr-2">
+                                        <mat-checkbox formControlName="reuseClientInfo">Reuse
+                                            this information</mat-checkbox>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        }
+
+                        @if(reuseInfoGroup.controls['reuseClientInfo'].getRawValue() === false){
+                        <form [formGroup]="clientInfoGroup" class="space-y-4">
+                            <mat-card-title class="text-lg mb-2">Personal Details</mat-card-title>
+                            <ng-template matStepLabel>Personal Details</ng-template>
+                            <!-- First Name Field -->
+                            <mat-form-field appearance="fill" class="w-full">
+                                <mat-label>First Name</mat-label>
+                                <input matInput formControlName="firstName" placeholder="Enter your first name">
+                                @if(clientInfoGroup.controls['firstName'].invalid ){
+                                @if(clientInfoGroup.controls['firstName'].hasError('required')){
+                                <mat-error>
+                                    First name is required.
+                                </mat-error>
+                                }
+                                @if(!clientInfoGroup.controls['firstName'].hasError('required') &&
+                                clientInfoGroup.controls['firstName'].hasError('pattern')){
+                                <mat-error>
+                                    Name format is invalid.
+                                </mat-error>
+                                }
+                                }
+                            </mat-form-field>
+
+                            <!-- Last Name Field -->
+                            <mat-form-field appearance="fill" class="w-full">
+                                <mat-label>Last Name</mat-label>
+                                <input matInput formControlName="lastName" placeholder="Enter your last name">
+                                @if(clientInfoGroup.controls['lastName'].invalid){
+                                @if(clientInfoGroup.controls['lastName'].hasError('required')){
+                                <mat-error>
+                                    Last name is required.
+                                </mat-error>
+                                }
+                                @if(!clientInfoGroup.controls['lastName'].hasError('required') &&
+                                clientInfoGroup.controls['lastName'].hasError('pattern')){
+                                <mat-error>
+                                    Name format is invalid.
+                                </mat-error>
+                                }
+                                }
+                            </mat-form-field>
+
+                            <!-- Email Field -->
+                            <mat-form-field appearance="fill" class="w-full">
+                                <mat-label>Email Address</mat-label>
+                                <input matInput formControlName="email" type="email" placeholder="Enter your email">
+                                @if(clientInfoGroup.controls['email'].invalid){
+                                @if(clientInfoGroup.controls['email'].hasError('required')){
+                                <mat-error>
+                                    Email name is required.
+                                </mat-error>
+                                }
+                                @if(!clientInfoGroup.controls['email'].hasError('required') &&
+                                clientInfoGroup.controls['email'].hasError('email')){
+                                <mat-error>
+                                    Email format is invalid.
+                                </mat-error>
+                                }
+                                }
+                            </mat-form-field>
+
+                            <!-- Phone Number Field -->
+                            <mat-form-field appearance="fill" class="w-full">
+                                <mat-label>Phone Number</mat-label>
+                                <input matInput formControlName="phone" type="tel"
+                                    placeholder="Enter your phone number">
+                                @if(clientInfoGroup.controls['phone'].invalid){
+                                @if(clientInfoGroup.controls['phone'].hasError('required')){
+                                <mat-error>
+                                    Phone number is required.
+                                </mat-error>
+                                }
+                                @if(!clientInfoGroup.controls['phone'].hasError('required') &&
+                                clientInfoGroup.controls['phone'].hasError('pattern')){
+                                <mat-error>
+                                    Phone number is invalid, it must be 10 digits without any space or other
+                                    characters
+                                </mat-error>
+                                }
+                                }
+                            </mat-form-field>
+                        </form>}
+                    </mat-card-content>
+                </mat-card>
+                <div class="my-[10px]">
+                    <button mat-raised-button color="primary" (click)="submitClientInfo(stepper)">Submit</button>
+                </div>
+            </mat-step>
+            <mat-step [stepControl]="cardInfoGroup">
+                <mat-card class="p-[10px]">
+                    <mat-card-content>
+                        @if(isloggedIn && userData.cardInfo){
+                        <div class="p-4 border border-solid my-2 flex flex-col">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="col-span-1">
+                                    <p>Card Holder Name</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>{{ userData.cardInfo.cardName }}</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>Card Number</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>xxxx-xxxx-xxxx-{{
+                                        userData.cardInfo.cardNumber.slice(-4) }}</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p>{{ userData.cardInfo.expDate.substring(0,2) }}/{{
+                                        userData.cardInfo.expDate.substring(2) }}</p>
+                                </div>
+                                <div class="col-span-1">
+                                    Billing Address
+                                </div>
+                                <div class="col-span-1 flex flex-col">
+                                    <p>{{userData.cardInfo.address.street}}</p>
+                                    <p>{{userData.cardInfo.address.city}}, {{userData.cardInfo.address.province}}</p>
+                                    <p>{{userData.cardInfo.address.postalCode}},
+                                        {{userData.cardInfo.address.country.toUpperCase()}}</p>
+                                </div>
+                                <div class="col-span-2" [formGroup]="reuseInfoGroup">
+                                    <p class="text-primary mr-2">
+                                        <mat-checkbox formControlName="reuseCardInfo">Reuse
+                                            this information</mat-checkbox>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        @if(reuseInfoGroup.controls['reuseCardInfo'].getRawValue() === false){
+                        <form [formGroup]="cardInfoGroup" class="space-y-4">
+                            <ng-template matStepLabel>Card Information</ng-template>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <!-- Name on card -->
+                                <mat-form-field appearance="fill" class="w-full">
+                                    <mat-label>Name on card</mat-label>
+                                    <input matInput placeholder="Enter your name as shown on card"
+                                        formControlName="cardName">
+                                    @if(cardInfoGroup.controls['cardName'].invalid){
+                                    @if(cardInfoGroup.controls['cardName'].hasError('required')){
+                                    <mat-error>
+                                        Name on card is required.
+                                    </mat-error>
+                                    }
+                                    @if(!cardInfoGroup.controls['cardName'].hasError('required') &&
+                                    cardInfoGroup.controls['cardName'].hasError('pattern')){
+                                    <mat-error>
+                                        Name on card is invalid
+                                    </mat-error>
+                                    }
+                                    }
+                                </mat-form-field>
+
+                                <!-- Card number -->
+                                <mat-form-field appearance="fill" class="w-full">
+                                    <mat-label>Card number</mat-label>
+                                    <input matInput placeholder="Enter your card number" formControlName="cardNumber">
+                                    @if(cardInfoGroup.controls['cardNumber'].invalid){
+                                    @if(cardInfoGroup.controls['cardNumber'].hasError('required')){
+                                    <mat-error>
+                                        Card number is required.
+                                    </mat-error>
+                                    }
+                                    @if(!cardInfoGroup.controls['cardNumber'].hasError('required') &&
+                                    cardInfoGroup.controls['cardNumber'].hasError('pattern')){
+                                    <mat-error>
+                                        The card number must be 16 digits.
+                                    </mat-error>
+                                    }
+                                    }
+                                </mat-form-field>
+
+                                <!-- Expiry date -->
+                                <mat-form-field appearance="fill" class="w-full">
+                                    <mat-label>Expiry date</mat-label>
+                                    <input matInput placeholder="MMYY" formControlName="expDate">
+                                    @if(cardInfoGroup.controls['expDate'].invalid){
+                                    @if(cardInfoGroup.controls['expDate'].hasError('required')){
+                                    <mat-error>
+                                        Expiry date is required.
+                                    </mat-error>
+                                    }
+                                    @if(!cardInfoGroup.controls['expDate'].hasError('required') &&
+                                    cardInfoGroup.controls['expDate'].hasError('pattern')){
+                                    <mat-error>
+                                        Expiry date format is MMYY.
+                                    </mat-error>
+                                    }
+                                    @if(!cardInfoGroup.controls['expDate'].hasError('required') &&
+                                    cardInfoGroup.controls['expDate'].hasError('custom')){
+                                    <mat-error>
+                                        {{cardInfoGroup.controls['expDate'].getError('custom')}}
+                                    </mat-error>
+                                    }
+                                    }
+                                </mat-form-field>
+
+                                <!-- CVV -->
+                                <mat-form-field appearance="fill" class="w-full">
+                                    <mat-label>CVV</mat-label>
+                                    <input matInput placeholder="Enter your CVV" formControlName="cvv">
+                                    @if(cardInfoGroup.controls['cvv'].invalid){
+                                    @if(cardInfoGroup.controls['cvv'].hasError('required')){
+                                    <mat-error>
+                                        CVV is required.
+                                    </mat-error>
+                                    }
+                                    @if(!cardInfoGroup.controls['cvv'].hasError('required') &&
+                                    cardInfoGroup.controls['cvv'].hasError('pattern')){
+                                    <mat-error>
+                                        CVV must be 3 digits.
+                                    </mat-error>
+                                    }
+                                    }
+                                </mat-form-field>
+                            </div>
+                            <!-- Billing Address Section -->
+                            <ng-template matStepLabel>Billing Address</ng-template>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <!-- Street -->
+                                <mat-form-field appearance="fill" class="w-full">
+                                    <mat-label>Street</mat-label>
+                                    <input matInput placeholder="Enter your street address"
+                                        [formControl]="$any(cardInfoGroup).controls['address'].get('street')">
+                                    @if($any(cardInfoGroup).controls['address'].get('street').invalid){
+                                    @if($any(cardInfoGroup).controls['address'].get('street').hasError('required')){
+                                    <mat-error>
+                                        Street is required.
+                                    </mat-error>
+                                    }
+                                    }
+                                </mat-form-field>
+
+                                <!-- City -->
+                                <mat-form-field appearance="fill" class="w-full">
+                                    <mat-label>City</mat-label>
+                                    <input matInput placeholder="Enter your city"
+                                        [formControl]="$any(cardInfoGroup).controls['address'].get('city')">
+                                    @if($any(cardInfoGroup).controls['address'].get('city').invalid){
+                                    @if($any(cardInfoGroup).controls['address'].get('city').hasError('required')){
+                                    <mat-error>
+                                        City is required.
+                                    </mat-error>
+                                    }
+                                    @if(!$any(cardInfoGroup).controls['address'].get('city').hasError('required') &&
+                                    $any(cardInfoGroup).controls['address'].get('city').hasError('pattern')){
+                                    <mat-error>
+                                        City is invalid.
+                                    </mat-error>
+                                    }
+                                    }
+                                </mat-form-field>
+
+                                <!-- Province -->
+                                <mat-form-field appearance="fill" class="w-full">
+                                    <mat-label>State/Province/Region</mat-label>
+                                    <input matInput placeholder="Enter your province"
+                                        [formControl]="$any(cardInfoGroup).controls['address'].get('province')">
+                                    @if($any(cardInfoGroup).controls['address'].get('province').invalid){
+                                    @if($any(cardInfoGroup).controls['address'].get('province').hasError('required')){
+                                    <mat-error>
+                                        Province is required.
+                                    </mat-error>
+                                    }
+                                    @if(!$any(cardInfoGroup).controls['address'].get('province').hasError('required') &&
+                                    $any(cardInfoGroup).controls['address'].get('province').hasError('pattern')){
+                                    <mat-error>
+                                        Province format should be 2 uppercase letters.
+                                    </mat-error>
+                                    }
+                                    }
+                                </mat-form-field>
+
+                                <!-- Postal Code -->
+                                <mat-form-field appearance="fill" class="w-full">
+                                    <mat-label>Postal Code</mat-label>
+                                    <input matInput placeholder="Enter your postal code"
+                                        [formControl]="$any(cardInfoGroup).controls['address'].get('postalCode')">
+                                    @if($any(cardInfoGroup).controls['address'].get('postalCode').invalid){
+                                    @if($any(cardInfoGroup).controls['address'].get('postalCode').hasError('required')){
+                                    <mat-error>
+                                        Postal code is required.
+                                    </mat-error>
+                                    }
+                                    @if(!$any(cardInfoGroup).controls['address'].get('postalCode').hasError('required')
+                                    &&
+                                    $any(cardInfoGroup).controls['address'].get('postalCode').hasError('pattern')){
+                                    <mat-error>
+                                        Postal code format is incorrect. It should be like "M1A 1M1" or "M1A1M1"
+                                    </mat-error>
+                                    }
+                                    }
+                                </mat-form-field>
+
+                                <!-- Country -->
+                                <mat-form-field appearance="fill" class="w-full">
+                                    <mat-label>Country</mat-label>
+                                    <input matInput placeholder="Enter your country"
+                                        [formControl]="$any(cardInfoGroup).controls['address'].get('country')">
+
+                                    @if($any(cardInfoGroup).controls['address'].get('country').invalid){
+                                    @if($any(cardInfoGroup).controls['address'].get('country').hasError('required')){
+                                    <mat-error>
+                                        Country is required.
+                                    </mat-error>
+                                    }
+                                    @if(!$any(cardInfoGroup).controls['address'].get('country').hasError('required')
+                                    &&
+                                    $any(cardInfoGroup).controls['address'].get('country').hasError('pattern')){
+                                    <mat-error>
+                                        Country format is incorrect.
+                                    </mat-error>
+                                    }
+                                    }
+                                </mat-form-field>
+                            </div>
+                        </form>}
+                    </mat-card-content>
+                </mat-card>
+                <div class="my-[10px]">
+                    <button mat-raised-button color="primary" (click)="submitCardInfo(stepper)">Submit</button>
+                    <button mat-button matStepperPrevious>Back</button>
+                </div>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Done</ng-template>
+                <mat-card class="mb-2 shadow-md">
+                    <mat-card-content>
+                        <mat-card-title class="mb-2">Personal Details</mat-card-title>
+                        <div class="flex flex-col space-y-2">
+                            <!-- First Name -->
+                            <div class="flex items-center justify-between">
+                                <div class="mr-4">First Name:</div>
+                                <div>{{bookingFormGroup.controls['clientInfo'].value.firstName}}</div>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="flex items-center justify-between">
+                                <div class="mr-4">Last Name:</div>
+                                <div>{{bookingFormGroup.controls['clientInfo'].value.lastName}}</div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="flex items-center justify-between">
+                                <div class="mr-4">Email:</div>
+                                <div>{{bookingFormGroup.controls['clientInfo'].value.email}}</div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="flex items-center justify-between">
+                                <div class="mr-4">Phone:</div>
+                                <div>{{bookingFormGroup.controls['clientInfo'].value.phone}}</div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="shadow-md">
+                    <mat-card-content>
+                        <div class="flex flex-col">
+                            <div>
+                                <mat-card-title class="my-2">Billing Address</mat-card-title>
+                                <div class="mb-2">{{bookingFormGroup.controls['cardInfo'].value.address?.street}}</div>
+                                <div class="mb-2">{{bookingFormGroup.controls['cardInfo'].value.address?.city}},
+                                    {{bookingFormGroup.controls['cardInfo'].value.address?.province}}</div>
+                                <div class="mb-2">{{bookingFormGroup.controls['cardInfo'].value.address?.postalCode}},
+                                    {{bookingFormGroup.controls['cardInfo'].value.address?.country?.toUpperCase()}}
+                                </div>
+                            </div>
+                            <div>
+                                <mat-card-title class="my-2">Payment Details</mat-card-title>
+                                <div class="flex flex-col space-y-2">
+                                    <!-- Card Holder Name -->
+                                    <div class="flex justify-between items-center">
+                                        <div class="mr-8">Card Holder Name:</div>
+                                        <div>{{ bookingFormGroup.controls['cardInfo'].value.cardName }}</div>
+                                    </div>
+
+                                    <!-- Card Number -->
+                                    <div class="flex justify-between items-center">
+                                        <div class="mr-8">Card Number:</div>
+                                        <div>xxxx-xxxx-xxxx-{{
+                                            bookingFormGroup.controls['cardInfo'].value.cardNumber.slice(-4) }}</div>
+                                    </div>
+
+                                    <!-- Expiry Date -->
+                                    <div class="flex justify-between items-center">
+                                        <div class="mr-8">Expiry Date:</div>
+                                        <div>{{ bookingFormGroup.controls['cardInfo'].value.expDate.substring(0,2) }}/{{
+                                            bookingFormGroup.controls['cardInfo'].value.expDate.substring(2) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+                <div class="my-[10px]">
+                    <button mat-raised-button color="primary" (click)="confirmBooking()">Confirm</button>
+                    <button mat-button matStepperPrevious>Back</button>
+                </div>
+            </mat-step>
+        </mat-stepper>
+    </div>
+</div>} @else {
+<mat-card class="mx-auto p-10 shadow-lg w-[500px] mt-[20px]">
+    <div class="flex flex-col space-y-2">
+        <h4 class="text-3xl font-bold">Booked Successfully!</h4>
+        <h4 class="text-3xl font-bold">We have sent a confirmation to your email.</h4>
+        @if(isloggedIn && role === 'user'){
+        <button mat-raised-button color="primary" class="text-lg" routerLink="/myBookings">View my bookings</button>
+        }
+        <button mat-raised-button color="primary" class="text-lg" routerLink="/">Go to Home Page</button>
+    </div>
+</mat-card>
+}

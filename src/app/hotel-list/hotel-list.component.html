@@ -1,0 +1,64 @@
+<div class="w-4/5 mx-auto">
+    <div class="mt-[10px]">
+        <app-search-bar />
+    </div>
+    <div class="my-6">
+        <mat-divider></mat-divider>
+    </div>
+    <div class="flex flex-row justify-center m-auto w-full">
+        <div class="w-[260px] mt-2 p-4">
+            <mat-card>
+                <form [formGroup]="searchFormGroup">
+                    <mat-card-header>Filter By</mat-card-header>
+                    <mat-card-content>
+                        <p>Your budget per night</p>
+                        <p>CAD {{ minPrice }} - CAD {{ maxPrice }}</p>
+                        <mat-slider min="0" max="500">
+                            <input formControlName="minPrice" matSliderStartThumb>
+                            <input formControlName="maxPrice" matSliderEndThumb>
+                        </mat-slider>
+                        <p>Facilities</p>
+                        <mat-selection-list formControlName="tags">
+                            <mat-list-option value="Wifi">Wifi</mat-list-option>
+                            <mat-list-option value="Parking">Parking</mat-list-option>
+                            <mat-list-option value="Laundry">Laundry</mat-list-option>
+                            <mat-list-option value="Bar">Bar</mat-list-option>
+                            <mat-list-option value="Restaurant">Restaurant</mat-list-option>
+                            <mat-list-option value="Pool">Pool</mat-list-option>
+                            <mat-list-option value="Breakfast">Breakfast</mat-list-option>
+                        </mat-selection-list>
+                    </mat-card-content>
+                </form>
+            </mat-card>
+        </div>
+        <div class="w-[700px]">
+            @for (hotel of filteredList; track hotel._id) {
+            <div class="mt-2 p-2">
+                <mat-card>
+                    <mat-card-content>
+                        <div class="flex flex-row justify-start">
+                            <img (click)="checkHotelDetails(hotel,hotel._id)" [src]="hotel.Photo" alt="Hotel Image"
+                                class="mr-[20px] w-[200px] h-[200px]">
+                            <div class="flex flex-col justify-between flex-grow h-[200px]">
+                                <div class="justify-between flex flex-row items-start">
+                                    <div>
+                                        <h2 (click)="checkHotelDetails(hotel,hotel._id)">{{ hotel.HotelName }}</h2>
+                                        <h4>{{ hotel.Address.StreetAddress }}, {{ hotel.Address.City }}</h4>
+                                    </div>
+                                    <div
+                                        class="bg-blue-800 flex text-white items-center content-center justify-center h-[40px] rounded-lg w-[40px]">
+                                        <div class="m-auto font-black">{{hotel.Rating}}</div>
+                                    </div>
+                                </div>
+                                <button mat-raised-button color="primary" (click)="checkHotelDetails(hotel,hotel._id)">
+                                    See availability
+                                </button>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            }
+        </div>
+    </div>
+</div>

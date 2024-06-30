@@ -1,0 +1,29 @@
+<div class="flex flex-row space-x-10 mx-auto justify-center mt-10 w-1/2">
+    <!-- Left Paper -->
+    <mat-card class="p-6 shadow-lg">
+        <mat-nav-list>
+            <a mat-list-item routerLink="/profile" class="p-0">
+                Account Info
+            </a>
+            <a mat-list-item routerLink="/profile/clientInfo" class="p-0">
+                <mat-icon>account_box</mat-icon>
+                Client Info
+            </a>
+            <a mat-list-item routerLink="/profile/cardInfo" class="p-0">
+                <mat-icon>credit_card</mat-icon>
+                Card Info
+            </a>
+            <a mat-list-item routerLink="/profile/changePassword" class="p-0">
+                <mat-icon>key</mat-icon>
+                Change Password
+            </a>
+        </mat-nav-list>
+    </mat-card>
+
+    <!-- Right Paper -->
+    <mat-card class="p-6 shadow-lg w-full">
+        <mat-card-content>
+            <router-outlet></router-outlet>
+        </mat-card-content>
+    </mat-card>
+</div>

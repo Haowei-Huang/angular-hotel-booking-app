@@ -1,0 +1,43 @@
+<mat-toolbar>
+    <div class="mx-auto center">
+        <span class="text-xl font-black">Dashboard</span>
+    </div>
+    <button mat-raised-button color="primary" (click)="logOut()">Logout</button>
+</mat-toolbar>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" disableClose opened>
+        <mat-nav-list>
+            <mat-list-item routerLink="/">
+                <mat-icon matListItemIcon>home</mat-icon>
+                Home
+            </mat-list-item>
+            <mat-list-item routerLink="/dashboard">
+                <mat-icon matListItemIcon>dashboard</mat-icon>
+                Dashboard
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item routerLink="/dashboard/manageUsers">
+                <mat-icon matListItemIcon>supervised_user_circle</mat-icon>
+                Manager Users
+            </mat-list-item>
+            <mat-list-item routerLink="/dashboard/manageHotels">
+                <mat-icon matListItemIcon>hotel</mat-icon>
+                Manager Hotels
+            </mat-list-item>
+            <mat-list-item routerLink="/dashboard/manageBookings">
+                <mat-icon matListItemIcon>payment</mat-icon>
+                Manager Bookings
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item routerLink="/dashboard/changePassword">
+                <mat-icon matListItemIcon>key</mat-icon>
+                Change Password
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

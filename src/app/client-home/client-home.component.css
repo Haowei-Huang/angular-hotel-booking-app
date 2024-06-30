@@ -1,0 +1,21 @@
+.welcomeContainer {
+    background-image: url("https://r-xx.bstatic.com/xdata/images/xphoto/2880x868/313564245.jpeg?k=c677d4c63f8a8218d275614559b8ccd5dc5f169b44667c3ff46328091c225b13&o=");
+    position: relative;
+    background-color: gray;
+    color: '#fff';
+    background-size: cover;
+    background-repeat: 'no-repeat';
+    background-position: 'center';
+    height: 350px;
+}
+
+.welcomeText {
+    position: 'relative';
+    display: flex;
+    flex-direction: column;
+    color: white;
+    margin: auto;
+    width: 50%;
+    padding-top: 50px;
+    font-weight: bold;
+}

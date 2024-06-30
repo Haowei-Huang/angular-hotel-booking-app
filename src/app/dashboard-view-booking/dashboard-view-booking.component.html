@@ -1,0 +1,112 @@
+<div class="flex justify-center items-center mt-20">
+    <div class="flex flex-row space-x-3">
+        <div class="flex flex-col space-y-3 mr-2">
+            <mat-card class="shadow-md mb-2">
+                <mat-card-content>
+                    <h4 class="text-gray-500">Hotel Info</h4>
+                    <h4 class="mb-2">{{ booking.hotel.HotelName }}</h4>
+                    <div class="flex items-center space-x-1">
+                        <mat-icon color="action">location_on</mat-icon>
+                        <p class="text-gray-500 text-sm">
+                            {{booking.hotel.Address.StreetAddress}}, {{booking.hotel.Address.City}},
+                            {{booking.hotel.Address.StateProvince}}, {{booking.hotel.Address.PostalCode}},
+                            {{booking.hotel.Address.Country}}
+                        </p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="shadow mb-2">
+                <mat-card-content>
+                    <h4 class="text-lg font-semibold mb-2">Your booking details</h4>
+                    <div class="flex items-center space-x-2">
+                        <div class="flex-1">
+                            <p class="text-gray-500">Check-in</p>
+                            <p class="text-lg">{{ formatDate(booking.from)}}</p>
+                            <p class="text-sm">From 16:00</p>
+                        </div>
+                        <mat-divider vertical="true"></mat-divider>
+                        <div class="flex-1">
+                            <p class="text-gray-500">Check-out</p>
+                            <p class="text-lg">{{ formatDate(booking.to) }}</p>
+                            <p class="text-sm">Until 12:00</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 mt-2">Total length of stay:</p>
+                    <p>{{ booking.duration }} {{ booking.duration > 1 ? "nights" : "night" }}</p>
+                    <p class="text-gray-500 mt-1">You selected</p>
+                    <p>{{ booking.rooms.length }} {{ booking.rooms.length > 1 ? "rooms" : "room" }} for {{
+                        booking.numberOfGuest }} {{ booking.numberOfGuest > 1 ? "guests" : "guest" }}</p>
+                    @for(room of booking.rooms; track room.RoomId){
+                    <p class="mt-0.5">{{ room.Description }}</p>
+                    }
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="shadow">
+                <mat-card-content>
+                    <h4 class="text-lg font-semibold mb-2">Your price summary</h4>
+                    <div class="flex justify-between bg-blue-500 text-white p-2 rounded">
+                        <h3 class="text-xl">Price</h3>
+                        <h3 class="text-xl">CAD {{ booking.totalPrice.toFixed(2) }}</h3>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="flex flex-col space-y-2">
+            <mat-card class="shadow-md mb-2">
+                <mat-card-content>
+                    <h4 class="text-lg">Personal Details</h4>
+                    <div class="flex justify-between space-x-8">
+                        <div class="flex flex-col">
+                            <p class="mb-2">First Name</p>
+                            <p class="mb-2">Last Name</p>
+                            <p class="mb-2">Email</p>
+                            <p class="mb-2">Phone</p>
+                        </div>
+                        <div class="flex flex-col">
+                            <p class="mb-2">{{ booking.clientInfo.firstName }}</p>
+                            <p class="mb-2">{{ booking.clientInfo.lastName }}</p>
+                            <p class="mb-2">{{ booking.clientInfo.email }}</p>
+                            <p class="mb-2">{{ booking.clientInfo.phone }}</p>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="shadow">
+                <mat-card-content>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <!-- Billing Address -->
+                        <div class="col-span-1 md:col-span-1">
+                            <h4 class="text-lg my-2">Billing Address</h4>
+                            <p class="mb-2">{{ booking.cardInfo.address.street }}</p>
+                            <p class="mb-2">{{ booking.cardInfo.address.city }}, {{ booking.cardInfo.address.province }}
+                            </p>
+                            <p class="mb-2">{{ booking.cardInfo.address.postalCode }}, {{
+                                booking.cardInfo.address.country.toUpperCase() }}</p>
+                        </div>
+                        <!-- Payment Details -->
+                        <div class="col-span-1 md:col-span-2">
+                            <h4 class="text-lg my-2">Payment Details</h4>
+                            <div class="flex flex-row space-x-8">
+                                <div class="flex flex-col">
+                                    <p class="mb-2">Card Holder Name</p>
+                                    <p class="mb-2">Card Number</p>
+                                    <p class="mb-2">Expiry Date</p>
+                                </div>
+                                <div class="flex flex-col">
+                                    <p class="mb-2">{{ booking.cardInfo.cardName }}</p>
+                                    <p class="mb-2">xxxx-xxxx-xxxx-{{ booking.cardInfo.cardNumber.slice(-4) }}</p>
+                                    <p class="mb-2">{{ booking.cardInfo.expDate.substring(0, 2) }}/{{
+                                        booking.cardInfo.expDate.substring(2) }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <div class="flex justify-end mt-2">
+                <button mat-raised-button color="primary" class="text-xl" (click)="goBack()">Back</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+/* General toolbar styling */
+mat-toolbar {
+    background-color: var(--primary-color);
+    /* Set your primary color */
+    color: rgb(96, 0, 251);
+    padding: 0 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Button styling */
+mat-toolbar button {
+    margin-right: 8px;
+}
+
+/* Last button margin fix */
+mat-toolbar button:last-child {
+    margin-right: 0;
+}
+
+/* Icon button adjustments */
+mat-toolbar mat-icon-button {
+    margin-left: auto;
+    /* Pushes the menu icon to the far right */
+}
+
+/* Active link styling */
+.router-link-active {
+    background-color: var(--accent-color);
+    /* Accent color for active state */
+    color: #fff;
+    border-radius: 4px;
+}
+
+
+mat-sidenav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+}
+
+mat-sidenav-container {
+    position: absolute;
+    top: 65px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.content {
+    padding: 50px;
+}

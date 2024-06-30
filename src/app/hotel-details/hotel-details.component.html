@@ -1,0 +1,88 @@
+<mat-card class="w-full">
+    <img mat-card-image [src]="hotel.Photo" class="h-72 object-cover">
+    <mat-card-content>
+        <h2 mat-card-title class="text-xl font-semibold">{{ hotel.HotelName }}</h2>
+        <h5 class="text-sm text-gray-600">{{ hotel.Description }}</h5>
+        <div
+            class="bg-blue-800 flex text-white items-center content-center justify-center h-[40px] rounded-lg w-[40px]">
+            <div class="m-auto font-black">{{hotel.Rating}}</div>
+        </div>
+        <div class="flex items-center space-x-1">
+            <mat-icon class="text-gray-500">location_on</mat-icon>
+            <p class="text-sm text-gray-600">
+                {{hotel.Address.StreetAddress}}, {{hotel.Address.City}}, {{hotel.Address.StateProvince}},
+                {{hotel.Address.PostalCode}}, {{hotel.Address.Country}}
+            </p>
+        </div>
+        <div class="mt-2 flex flex-wrap gap-1">
+            <mat-chip-listbox>
+                @for(tag of hotel.Tags; track tag){
+                <mat-chip disabled>{{tag}}</mat-chip>
+                }
+            </mat-chip-listbox>
+        </div>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+</mat-card>
+<form [formGroup]="bookingFormGroup">
+    <table mat-table [dataSource]="dataSource" class="min-w-full">
+        <ng-container matColumnDef="Description">
+            <th mat-header-cell *matHeaderCellDef>Room Description</th>
+            <td mat-cell *matCellDef="let element">
+                <div>
+                    <div>{{element.Description}}</div>
+                    <div>@for(tag of element.Tags; track tag){
+                        <mat-chip disabled>{{tag}}</mat-chip>
+                        }
+                    </div>
+                </div>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="BedOptions">
+            <th mat-header-cell *matHeaderCellDef>Bed Options</th>
+            <td mat-cell *matCellDef="let element">{{element.BedOptions}} <mat-icon>bed</mat-icon></td>
+        </ng-container>
+
+        <ng-container matColumnDef="NumberOfGuest">
+            <th mat-header-cell *matHeaderCellDef>Number of Guests</th>
+            <td mat-cell *matCellDef="let element">@for(num of [1, element.SleepCount]; track num){
+                <mat-icon>person</mat-icon>
+                }
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Price">
+            <th mat-header-cell *matHeaderCellDef>Price for {{duration}} {{duration > 1 ? "nights" :
+                "night"}}</th>
+            <td mat-cell *matCellDef="let element">${{(element.BaseRate * duration).toFixed(2)}}</td>
+        </ng-container>
+
+        <mat-selection-list formControlName="rooms">
+            <ng-container matColumnDef="Select">
+                <th mat-header-cell *matHeaderCellDef>Select</th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="float-left">
+                        <mat-list-option [value]="element">
+                        </mat-list-option>
+                    </div>
+                </td>
+            </ng-container>
+        </mat-selection-list>
+
+        <ng-container matColumnDef="Reserve">
+            <th mat-header-cell *matHeaderCellDef>
+                <button mat-raised-button color="primary" (click)="reserve()"
+                    [disabled]="bookingFormGroup.value.rooms.length < 1">Reserve</button>
+            </th>
+            <td mat-cell *matCellDef="let element"></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</form>
+
+<div class="mt-2">
+    <button mat-raised-button color="primary" class="text-xl" (click)="goBack()">Back</button>
+</div>
